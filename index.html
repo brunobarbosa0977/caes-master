@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plato Vital · Análisis de alimentación de tu perro</title>
+<meta name="description" content="Responde 10 preguntas y descubre si la alimentación de tu perro está ayudando o perjudicando su salud.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F3EA;          /* crema natural */
+    --card:#FFFFFF;
+    --ink:#1C2A22;         /* verde casi negro */
+    --muted:#5D6B61;
+    --line:#E3DED0;
+    --green:#2F6B45;       /* verde salud */
+    --green-2:#E4F0E7;
+    --red:#C8261B;         /* alerta */
+    --red-2:#FDECEA;
+    --yellow:#F2B705;      /* atención */
+    --yellow-2:#FFF6D6;
+    --gold:#B8860B;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--bg);color:var(--ink);font:400 17px/1.55 "DM Sans",system-ui,sans-serif}
+  h1,h2,h3{font-family:"Fraunces",Georgia,serif;line-height:1.15;letter-spacing:-.01em}
+  img{max-width:100%}
+  .wrap{max-width:560px;margin:0 auto;padding:0 16px}
+  .screen{display:none;min-height:100svh;padding:24px 0 48px}
+  .screen.on{display:block;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* Buttons */
+  .btn{display:block;width:100%;border:0;border-radius:14px;padding:18px 20px;font:700 17px/1.2 "DM Sans",sans-serif;
+       cursor:pointer;text-align:center;text-decoration:none;transition:transform .08s ease, box-shadow .2s}
+  .btn:active{transform:scale(.98)}
+  .btn-main{background:var(--red);color:#fff;box-shadow:0 6px 0 #8E1A12}
+  .btn-main:active{box-shadow:0 2px 0 #8E1A12;transform:translateY(4px)}
+  .btn-green{background:var(--green);color:#fff;box-shadow:0 6px 0 #1D4A2E}
+  .btn-ghost{background:transparent;color:var(--muted);font-weight:500;padding:12px}
+  .pulse{animation:pulse 1.8s infinite}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
+
+  /* Tela 1 */
+  .kicker{display:inline-block;background:var(--ink);color:#fff;font-size:12px;font-weight:700;letter-spacing:.08em;
+          text-transform:uppercase;padding:7px 12px;border-radius:999px;margin-bottom:18px}
+  .hero h1{font-size:34px;font-weight:800;margin-bottom:14px}
+  .hero h1 em{font-style:normal;color:var(--red)}
+  .hero p{color:var(--muted);margin-bottom:22px}
+  .hero-visual{background:var(--green-2);border-radius:var(--radius);padding:28px 16px;text-align:center;font-size:76px;margin:18px 0 22px;line-height:1}
+  .hero-visual small{display:block;font-size:13px;color:var(--green);font-weight:700;margin-top:10px;letter-spacing:.04em}
+  .trust{display:flex;gap:14px;justify-content:center;color:var(--muted);font-size:13px;margin-top:14px;flex-wrap:wrap}
+
+  /* Quiz */
+  .qtop{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+  .back{background:none;border:0;font-size:22px;cursor:pointer;color:var(--muted);width:32px;height:32px}
+  .bar{flex:1;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--green);border-radius:99px;transition:width .35s ease}
+  .qcount{font-size:13px;color:var(--muted);min-width:42px;text-align:right}
+  .qstage{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:8px}
+  .qtitle{font-size:26px;font-weight:800;margin-bottom:6px}
+  .qhint{color:var(--muted);font-size:15px;margin-bottom:18px}
+  .opts{display:grid;gap:10px}
+  .opt{display:flex;align-items:center;gap:14px;width:100%;background:var(--card);border:2px solid var(--line);border-radius:14px;
+       padding:14px;font:500 16px/1.3 "DM Sans",sans-serif;color:var(--ink);text-align:left;cursor:pointer;transition:border-color .15s, background .15s}
+  .opt:hover{border-color:#C9C2AE}
+  .opt .ic{flex:0 0 48px;height:48px;border-radius:12px;background:var(--bg);display:grid;place-items:center;font-size:26px}
+  .opt.sel{border-color:var(--green);background:var(--green-2)}
+  .opt .chk{margin-left:auto;width:22px;height:22px;border-radius:6px;border:2px solid var(--line);flex:0 0 22px}
+  .opt.sel .chk{background:var(--green);border-color:var(--green)}
+  .grid2{grid-template-columns:1fr 1fr}
+  .grid2 .opt{flex-direction:column;text-align:center;gap:8px;padding:14px 8px;font-size:15px}
+  .input{width:100%;font:500 20px "DM Sans",sans-serif;padding:18px;border:2px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);outline:none}
+  .input:focus{border-color:var(--green)}
+  .search{font-size:16px;padding:14px;margin-bottom:12px}
+  .breeds{max-height:52svh;overflow:auto;padding-right:2px}
+  .mt{margin-top:16px}
+
+  /* Processing */
+  .proc{text-align:center;padding-top:12svh}
+  .proc .paw{font-size:64px;animation:bounce 1s infinite}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  .proc h2{font-size:24px;margin:18px 0 22px}
+  .pbar{height:14px;background:var(--line);border-radius:99px;overflow:hidden;margin:0 0 18px}
+  .pbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--yellow));transition:width .3s linear}
+  .steps{list-style:none;text-align:left;display:grid;gap:10px;max-width:400px;margin:0 auto}
+  .steps li{color:var(--muted);font-size:15px;opacity:.35;transition:opacity .3s}
+  .steps li.on{opacity:1;color:var(--ink)}
+  .steps li.done::before{content:"✓ ";color:var(--green);font-weight:700}
+
+  /* Result */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-bottom:18px}
+  .reshead{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .res h1{font-size:28px;margin-bottom:12px}
+  .gauge{position:relative;height:16px;border-radius:99px;background:linear-gradient(90deg,#3E9B5D 0%,var(--yellow) 50%,var(--red) 100%);margin:18px 0 6px}
+  .gauge b{position:absolute;top:-6px;width:28px;height:28px;border-radius:50%;background:#fff;border:4px solid var(--ink);transform:translateX(-50%);transition:left 1.2s cubic-bezier(.2,.8,.2,1)}
+  .glabels{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+  .level{display:inline-block;font-weight:700;padding:6px 12px;border-radius:99px;font-size:14px;margin-top:12px}
+  .lv-alto{background:var(--red-2);color:var(--red)}
+  .lv-mod{background:var(--yellow-2);color:#8A6400}
+  .lv-bajo{background:var(--green-2);color:var(--green)}
+  .signals{list-style:none;display:grid;gap:8px;margin-top:14px}
+  .signals li{display:flex;gap:10px;align-items:flex-start;font-size:15px;background:var(--bg);padding:10px 12px;border-radius:10px}
+  .signals li span{flex:0 0 auto}
+  .vet{background:var(--yellow-2);border:2px solid var(--yellow);border-radius:14px;padding:16px;font-size:15px;margin-top:16px}
+  .vet strong{display:block;margin-bottom:4px}
+
+  /* Dossier */
+  .dossier{border:3px solid var(--ink);border-radius:var(--radius);background:#fff;overflow:hidden;margin:28px 0 18px}
+  .dossier .tag{background:var(--red);color:#fff;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:9px 16px;display:flex;justify-content:space-between}
+  .dossier .body{padding:20px}
+  .dossier h2{font-size:27px;font-weight:800;margin-bottom:10px}
+  .dossier h2 mark{background:var(--yellow);color:var(--ink);padding:0 4px}
+  .dossier .dek{color:var(--muted);margin-bottom:16px}
+  .facts{display:grid;gap:14px}
+  .fact{display:flex;gap:12px}
+  .fact .n{flex:0 0 32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-weight:700;display:grid;place-items:center;font-size:14px}
+  .fact b{display:block;margin-bottom:2px}
+  .fact p{font-size:15px;color:var(--muted)}
+  .verdict{margin-top:18px;padding:14px;border-left:4px solid var(--red);background:var(--red-2);font-weight:500}
+
+  /* Animation */
+  .anim{background:var(--ink);color:#fff;border-radius:var(--radius);height:340px;position:relative;overflow:hidden;margin-bottom:10px}
+  .scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;opacity:0;transition:opacity .6s}
+  .scene.on{opacity:1}
+  .scene .big{font-size:84px;line-height:1;margin-bottom:16px}
+  .scene h3{font-size:22px;color:#fff}
+  .scene p{color:#C9D3CC;font-size:15px;margin-top:8px;max-width:380px}
+  .bag{background:#E9D9B0;color:var(--ink);border-radius:10px 10px 4px 4px;padding:22px 26px;font-family:"Fraunces",serif;font-weight:800;font-size:22px;box-shadow:0 8px 0 #B9A57A;transform:rotate(-3deg)}
+  .bag small{display:block;font:700 11px "DM Sans";letter-spacing:.1em;margin-top:6px;color:var(--green)}
+  .label{background:#fff;color:var(--ink);border-radius:8px;padding:14px 16px;font-size:13px;text-align:left;max-width:330px;line-height:1.7}
+  .label .hl{background:var(--yellow);padding:1px 3px;border-radius:3px;font-weight:700}
+  .counter{font-family:"Fraunces",serif;font-size:64px;font-weight:800;color:var(--yellow);line-height:1}
+  .compare{display:flex;gap:18px;font-size:64px;align-items:center}
+  .compare span{font-size:28px;color:#C9D3CC}
+  .adots{display:flex;gap:6px;justify-content:center;position:absolute;bottom:14px;left:0;right:0}
+  .adots i{width:7px;height:7px;border-radius:50%;background:#ffffff40}
+  .adots i.on{background:#fff}
+  .caption{font-size:13px;color:var(--muted);text-align:center;margin-bottom:28px}
+
+  /* Sales */
+  .sales h1{font-size:32px;font-weight:800;margin:6px 0 12px}
+  .sales h1 em{font-style:normal;color:var(--red)}
+  .sales h2{font-size:25px;margin:30px 0 12px}
+  .sales p{margin-bottom:14px}
+  .sub{color:var(--muted);font-size:18px}
+  .lead p{font-size:18px}
+  .lead p:first-child::first-letter{font-family:"Fraunces",serif;font-size:3.1em;float:left;line-height:.9;padding:4px 8px 0 0;color:var(--green)}
+  .pull{font-family:"Fraunces",serif;font-size:22px;font-weight:600;border-left:4px solid var(--red);padding-left:14px;margin:20px 0}
+  .method{display:grid;gap:12px}
+  .mstep{display:flex;gap:14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+  .mstep .n{flex:0 0 44px;height:44px;border-radius:12px;background:var(--green);color:#fff;font:800 20px "Fraunces",serif;display:grid;place-items:center}
+  .mstep b{display:block;letter-spacing:.06em}
+  .mstep p{margin:2px 0 0;font-size:15px;color:var(--muted)}
+  .inside{list-style:none;display:grid;gap:8px}
+  .inside li{display:flex;gap:10px;align-items:flex-start}
+  .inside li::before{content:"✔";color:var(--green);font-weight:700}
+
+  .offers{display:grid;gap:16px;margin-top:8px}
+  .offer{background:#fff;border:2px solid var(--line);border-radius:18px;padding:20px;position:relative}
+  .offer.gold{border:3px solid var(--gold);box-shadow:0 10px 30px #B8860B26;order:-1}
+  .ribbon{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--gold);color:#fff;font-weight:700;font-size:12px;letter-spacing:.1em;padding:6px 14px;border-radius:99px;white-space:nowrap}
+  .offer h3{font-size:22px;margin-bottom:4px}
+  .offer .pitch{font-size:15px;color:var(--muted);margin-bottom:12px}
+  .price{font:800 44px "Fraunces",serif;line-height:1;margin:6px 0 4px}
+  .price small{font:500 15px "DM Sans";color:var(--muted)}
+  .per{font-size:13px;color:var(--muted);margin-bottom:14px}
+  .incl{list-style:none;display:grid;gap:8px;margin:12px 0 18px;font-size:15px}
+  .incl li{display:flex;gap:10px}
+  .incl .y{color:var(--green);font-weight:700}
+  .incl .no{color:#B9B2A0}
+  .incl .no span{text-decoration:line-through;color:#A39C8A}
+  .incl .bonus{font-weight:700}
+  .tag-new{font-size:11px;background:var(--gold);color:#fff;border-radius:4px;padding:1px 6px;margin-left:4px;vertical-align:2px}
+  .btn-gold{background:var(--gold);color:#fff;box-shadow:0 6px 0 #7E5C07}
+  .btn-plain{background:var(--bg);color:var(--ink);border:2px solid var(--line)}
+
+  table.cmp{width:100%;border-collapse:collapse;font-size:14px;background:#fff;border-radius:14px;overflow:hidden;margin:6px 0}
+  .cmp th,.cmp td{padding:11px 8px;border-bottom:1px solid var(--line);text-align:center}
+  .cmp th:first-child,.cmp td:first-child{text-align:left}
+  .cmp thead th{background:var(--ink);color:#fff;font-weight:700}
+  .cmp thead th.g{background:var(--gold)}
+  .cmp td.g{background:#FBF4E2;font-weight:700}
+  .cmp .y{color:var(--green);font-weight:700}
+  .cmp .x{color:#C9C2AE}
+
+  .guar{display:flex;gap:14px;align-items:center;background:var(--green-2);border-radius:14px;padding:16px;margin-top:22px}
+  .guar .s{font-size:44px}
+  details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+  summary{font-weight:700;cursor:pointer}
+  details p{margin:10px 0 0;font-size:15px;color:var(--muted)}
+  footer{font-size:12px;color:var(--muted);text-align:center;padding:30px 0 10px;line-height:1.6}
+  .sticky{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:#F6F3EAee;backdrop-filter:blur(6px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .3s;z-index:5}
+  .sticky.on{transform:none}
+  .sticky .btn{max-width:528px;margin:0 auto;padding:15px}
+  @media (min-width:600px){.hero h1{font-size:40px}.sales h1{font-size:38px}}
+</style>
+</head>
+<body>
+
+<!-- ============ TELA 1 · ENTRADA ============ -->
+<section class="screen on" id="s-intro">
+  <div class="wrap hero">
+    <span class="kicker">Solo para quienes aman a su perro más que a nada</span>
+    <h1>Tu perro confía en ti. ¿Sabes de verdad lo que hay <em>en su plato?</em></h1>
+    <div class="hero-visual">🐕🥣<small>ANÁLISIS GRATUITO · 2 MINUTOS</small></div>
+    <p>La bolsa dice “100% nutrición”. La lista de ingredientes cuenta otra historia. Responde 10 preguntas rápidas y descubre si lo que come tu perro todos los días está a su favor… o en su contra.</p>
+    <button class="btn btn-main pulse" id="start">ANALIZAR LA ALIMENTACIÓN DE MI PERRO →</button>
+    <div class="trust"><span>🔒 Sin registro</span><span>⏱ 2 minutos</span><span>📋 Resultado al instante</span></div>
+  </div>
+</section>
+
+<!-- ============ TELA 2 · QUIZ ============ -->
+<section class="screen" id="s-quiz">
+  <div class="wrap">
+    <div class="qtop">
+      <button class="back" id="qback" aria-label="Volver">←</button>
+      <div class="bar"><i id="qbar"></i></div>
+      <span class="qcount" id="qcount"></span>
+    </div>
+    <div id="qbox"></div>
+  </div>
+</section>
+
+<!-- ============ TELA 3a · PROCESAMIENTO ============ -->
+<section class="screen" id="s-proc">
+  <div class="wrap proc">
+    <div class="paw">🐾</div>
+    <h2 data-t>Analizando las respuestas de {nombre}…</h2>
+    <div class="pbar"><i id="pbar"></i></div>
+    <ul class="steps" id="psteps">
+      <li data-t>Cruzando las respuestas de {nombre}, tu {raza}</li>
+      <li>Identificando señales en piel, digestión y energía</li>
+      <li data-t>Comparando con la alimentación actual de {nombre}</li>
+      <li data-t>Preparando el plan para {nombre}</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ TELA 3b+4 · RESULTADO + DOSSIER + VENTAS ============ -->
+<section class="screen" id="s-result">
+  <div class="wrap">
+
+    <!-- Resultado personalizado -->
+    <div class="card res">
+      <div class="reshead" data-t>Resultado del análisis · {nombre}</div>
+      <h1 id="rTitle"></h1>
+      <p id="rBody" style="color:var(--muted)"></p>
+      <div class="gauge"><b id="gdot" style="left:0%"></b></div>
+      <div class="glabels"><span>Bajo</span><span>Moderado</span><span>Alto</span></div>
+      <span class="level" id="rLevel"></span>
+      <ul class="signals" id="rSignals"></ul>
+      <div class="vet" id="rVet" hidden>
+        <strong data-t>⚠️ Algunas respuestas sobre {nombre} necesitan un veterinario.</strong>
+        <span id="rVetList"></span> Llévalo a revisión antes de cambiar su dieta. Un buen plan de alimentación acompaña ese tratamiento — no lo reemplaza.
+      </div>
+    </div>
+
+    <!-- Dossier (manchete) -->
+    <article class="dossier">
+      <div class="tag"><span>Dossier Plato Vital</span><span>🔎 Investigación</span></div>
+      <div class="body">
+        <h2 data-t>Lo que la bolsa <mark>no te cuenta</mark> sobre el plato de perros como {nombre}.</h2>
+        <p class="dek">Cuatro hechos que la mayoría de los dueños descubre demasiado tarde.</p>
+        <div class="facts">
+          <div class="fact"><span class="n">1</span><div><b>Es comida ultraprocesada.</b><p>La mayoría de las croquetas se cocinan a alta temperatura y presión, y después se rocían con grasas y saborizantes para que el perro las acepte.</p></div></div>
+          <div class="fact"><span class="n">2</span><div><b>Ingredientes con nombres vagos.</b><p>“Subproductos de origen animal”, “harina de carne”, “grasa animal”. ¿De qué animal? ¿De qué parte? La etiqueta no está obligada a decírtelo.</p></div></div>
+          <div class="fact"><span class="n">3</span><div><b>Colores pensados para ti, no para tu perro.</b><p>Los perros no distinguen los colores como nosotros. Los colorantes de muchas croquetas existen para convencer al que compra la bolsa.</p></div></div>
+          <div class="fact"><span class="n">4</span><div><b>Lotes retirados del mercado.</b><p>En EE.UU. se han retirado croquetas tras alertas de la FDA por aflatoxinas (un hongo tóxico) y por exceso de vitamina D, con perros que murieron antes del retiro.</p></div></div>
+        </div>
+        <p class="verdict" data-t>No todas las croquetas son iguales. Pero si no puedes leer lo que hay en el plato de {nombre}, no sabes lo que le estás dando.</p>
+      </div>
+    </article>
+
+    <!-- Animación -->
+    <div class="anim" id="anim">
+      <div class="scene"><div class="bag">PREMIUM DOG<small>100% NUTRICIÓN COMPLETA</small></div><h3 style="margin-top:22px">Esto dice la bolsa.</h3></div>
+      <div class="scene">
+        <div class="label"><b>Ingredientes:</b> harina de maíz, <span class="hl">subproductos de origen animal</span>, harina de soja, <span class="hl">grasa animal</span>, sal, <span class="hl">saborizante artificial</span>, <span class="hl">colorantes (rojo 40, amarillo 5)</span>, <span class="hl">BHA</span>…</div>
+        <h3 style="margin-top:18px">Esto dice la etiqueta.</h3><p>Ejemplo ilustrativo de una lista de ingredientes común en croquetas económicas.</p>
+      </div>
+      <div class="scene"><p style="margin:0 0 6px;color:#C9D3CC;font-weight:700;letter-spacing:.08em;font-size:13px">MÁS DE</p><div class="counter" id="meals">0</div><h3 data-t>veces ha comido {nombre} ese mismo plato.</h3><p>Mismo sabor, misma bolsa, todos los días. Lo que parece poco en una comida, se acumula en años.</p></div>
+      <div class="scene"><div class="compare">🥣<span>→</span>🥩🥕🍚</div><h3>Comida que puedes reconocer.</h3><p data-t>Ingredientes reales, porciones claras y una transición segura para {nombre}.</p></div>
+      <div class="adots"><i></i><i></i><i></i><i></i></div>
+    </div>
+    <p class="caption">▶ Se reproduce automáticamente</p>
+
+    <!-- ============ TELA 4 · PÁGINA DE VENTAS ============ -->
+    <div class="sales">
+      <span class="kicker" data-t>Plan recomendado para {nombre}</span>
+      <h1 data-t>{nombre} come lo que tú le sirves. <em>Todos los días, durante años.</em></h1>
+      <p class="sub" data-t>Con el Protocolo Plato Vital dejas de adivinar: 50 recetas de comida natural y un plan de transición paso a paso para tu {raza}.</p>
+      <a href="#ofertas" class="btn btn-main" data-t>VER EL PLAN DE {NOMBRE} ↓</a>
+
+      <div class="lead">
+        <h2 data-t>Mira a {nombre} a los ojos.</h2>
+        <p data-t>No puede decirte que algo le cae mal. Que la piel le pica. Que se cansa antes que hace un año. Solo puede mostrártelo — rascándose, durmiendo más, dejando la comida a medias. Y la mayoría de los dueños lo atribuye a la edad, al clima o a “cosas de perro”.</p>
+        <p>Tú compras una marca cara y crees que haces lo correcto. Pero la bolsa dice “100% nutrición” y la lista de ingredientes dice otra cosa.</p>
+        <p class="pull">La industria vende comodidad: un producto que dura meses en el estante y que el perro come sin protestar. Eso no es lo mismo que comida de verdad.</p>
+        <p data-t>La buena noticia: el plato de {nombre} es la única parte de su salud que tú controlas cada día. Y cambiarlo es más fácil de lo que crees.</p>
+      </div>
+
+      <h2>El Método Plato Vital en 3 pasos</h2>
+      <div class="method">
+        <div class="mstep"><span class="n">1</span><div><b>TRANSICIÓN</b><p data-t>Cambias la dieta de {nombre} en 7 a 10 días, de forma gradual, para evitar malestar digestivo.</p></div></div>
+        <div class="mstep"><span class="n">2</span><div><b>NUTRICIÓN</b><p>50 recetas con ingredientes reales y porciones según el peso de tu perro. Nada de adivinar.</p></div></div>
+        <div class="mstep"><span class="n">3</span><div><b>CONTINUIDAD</b><p>Rotación de recetas para que nunca se aburra y siempre coma variado.</p></div></div>
+      </div>
+
+      <h2>Lo que vas a recibir</h2>
+      <ul class="inside">
+        <li>50 recetas de alimentación natural, explicadas paso a paso</li>
+        <li>Tabla de porciones según el peso de tu perro</li>
+        <li>Lista de compras para la semana</li>
+        <li>Acceso inmediato desde el celular — empieza hoy</li>
+      </ul>
+
+      <h2 id="ofertas" data-t>Elige el plan de {nombre}</h2>
+
+      <table class="cmp" aria-label="Comparación de planes">
+        <thead><tr><th></th><th>Bronce</th><th class="g">Oro ★</th></tr></thead>
+        <tbody>
+          <tr><td>50 recetas naturales</td><td class="y">✔</td><td class="g y">✔</td></tr>
+          <tr><td>Guía de alimentos prohibidos</td><td class="y">✔</td><td class="g y">✔</td></tr>
+          <tr><td>Checklist de transición</td><td class="y">✔</td><td class="g y">✔</td></tr>
+          <tr><td>Guía de suplementos naturales</td><td class="x">—</td><td class="g y">✔</td></tr>
+          <tr><td>Plan de reinicio de 7 días</td><td class="x">—</td><td class="g y">✔</td></tr>
+          <tr><td>Guía de premios caseros</td><td class="x">—</td><td class="g y">✔</td></tr>
+          <tr><td><b>Precio</b></td><td>US$ 9,90</td><td class="g">US$ 14,90</td></tr>
+        </tbody>
+      </table>
+
+      <div class="offers">
+        <div class="offer">
+          <h3>🥉 Plan Bronce</h3>
+          <p class="pitch">Lo esencial para empezar. Las recetas, sin el sistema completo.</p>
+          <div class="price">US$ 9,90 <small>pago único</small></div>
+          <ul class="incl">
+            <li class="y">✔ <span>50 recetas naturales</span></li>
+            <li class="y">✔ <span>Guía de alimentos prohibidos</span></li>
+            <li class="y">✔ <span>Checklist de transición</span></li>
+            <li class="no">✕ <span>Guía de suplementos naturales</span></li>
+            <li class="no">✕ <span>Plan de reinicio de 7 días</span></li>
+            <li class="no">✕ <span>Guía de premios caseros</span></li>
+          </ul>
+          <a class="btn btn-plain buy" data-plan="bronce" href="#">QUIERO EL PLAN BÁSICO</a>
+        </div>
+
+        <div class="offer gold">
+          <span class="ribbon">★ RECOMENDADO · ELECCIÓN INTELIGENTE</span>
+          <h3>🥇 Protocolo Oro</h3>
+          <p class="pitch" data-t>Por solo US$ 5 más, el sistema completo. Es la diferencia entre empezar y hacerlo bien con {nombre}.</p>
+          <div class="price">US$ 14,90 <small>pago único</small></div>
+          <p class="per">Menos que una bolsa de premios del supermercado.</p>
+          <ul class="incl">
+            <li class="y">✔ <span>50 recetas naturales</span></li>
+            <li class="y">✔ <span>Guía de alimentos prohibidos</span></li>
+            <li class="y">✔ <span>Checklist de transición</span></li>
+            <li class="y">✔ <span class="bonus">Guía de suplementos naturales <span class="tag-new">BONO</span></span></li>
+            <li class="y">✔ <span class="bonus">Plan de reinicio de 7 días <span class="tag-new">BONO</span></span></li>
+            <li class="y">✔ <span class="bonus">Guía de premios caseros <span class="tag-new">BONO</span></span></li>
+          </ul>
+          <a class="btn btn-gold pulse buy" data-plan="oro" href="#" data-t>¡SÍ! QUIERO EL PROTOCOLO COMPLETO PARA {NOMBRE}</a>
+        </div>
+      </div>
+
+      <div class="guar"><span class="s">🛡️</span><div><b>Garantía de <span id="gdays">7</span> días.</b><br><span style="font-size:15px;color:var(--muted)">Si no te gusta, pides el reembolso y recibes el 100% de tu dinero. Sin preguntas.</span></div></div>
+
+      <h2>Preguntas frecuentes</h2>
+      <details><summary data-t>¿Sirve para un {raza}?</summary><p>Sí. Las recetas se ajustan por peso, así que funcionan para perros pequeños, medianos y grandes.</p></details>
+      <details><summary>¿Y si mi perro tiene alguna enfermedad?</summary><p>Si tu perro está en tratamiento o tiene una condición diagnosticada (renal, hepática, pancreatitis, alergias), consulta a tu veterinario antes de cambiar su dieta y muéstrale las recetas.</p></details>
+      <details><summary>¿Cómo recibo el material?</summary><p>Apenas se confirma el pago, recibes el acceso por email. Puedes verlo en el celular, la tablet o imprimirlo.</p></details>
+      <details><summary>¿Es caro cocinar para mi perro?</summary><p>Las recetas usan ingredientes de supermercado y vienen con lista de compras semanal para que no gastes de más.</p></details>
+    </div>
+
+    <footer>
+      Plato Vital · Este análisis es orientativo y no reemplaza la consulta con un médico veterinario.<br>
+      Los resultados pueden variar según cada perro.
+    </footer>
+  </div>
+  <div class="sticky" id="sticky"><a href="#ofertas" class="btn btn-gold" data-t>QUIERO EL PLAN DE {NOMBRE}</a></div>
+</section>
+
+<script>
+/* ================== CONFIGURACIÓN ================== */
+const CONFIG = {
+  checkout: {
+    bronce: "https://pay.hotmart.com/REEMPLAZAR_BRONCE",
+    oro:    "https://pay.hotmart.com/REEMPLAZAR_ORO"
+  },
+  precio: { bronce: 9.90, oro: 14.90, moneda: "USD" },
+  garantiaDias: 7,
+  pixelId: ""            // ID del Pixel de Meta. Vacío = no dispara.
+};
+
+/* ================== PIXEL ================== */
+if (CONFIG.pixelId) {
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;
+  s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', CONFIG.pixelId); fbq('track', 'PageView');
+}
+const track = (ev, data, custom) => { try { if (window.fbq) fbq(custom ? 'trackCustom' : 'track', ev, data || {}); } catch(e){} };
+
+/* ================== ESTADO ================== */
+const S = { nombre: "", raza: "", answers: {} };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+
+/* Plantillas con {nombre} / {raza} / {NOMBRE} */
+const tplEls = [...document.querySelectorAll('[data-t]')].map(el => ({ el, html: el.innerHTML }));
+function fill(str){
+  const n = esc(S.nombre || "tu perro"), r = esc(S.raza || "perro");
+  return str.replace(/\{nombre\}/g, n).replace(/\{NOMBRE\}/g, n.toUpperCase()).replace(/\{raza\}/g, r);
+}
+function renderTpl(){ tplEls.forEach(t => t.el.innerHTML = fill(t.html)); }
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo(0,0);
+}
+
+/* ================== QUIZ ================== */
+const BREEDS = ["Mestizo","Labrador","Golden Retriever","Pastor Alemán","Bulldog Francés","Chihuahua","Caniche (Poodle)","Shih Tzu",
+  "Yorkshire","Schnauzer","Pug","Beagle","Pitbull","Husky Siberiano","Salchicha (Dachshund)","Maltés","Border Collie",
+  "Rottweiler","Boxer","Pomerania","Cocker Spaniel","Bulldog Inglés","Dóberman","Lhasa Apso","Jack Russell"];
+
+// w = peso de alerta (0-3). flag = requiere veterinario. sig = texto de la señal en el resultado.
+const Q = [
+  { id:"nombre", stage:"Conexión", type:"text", title:"¿Cómo se llama tu perro?", hint:"Vamos a personalizar todo el análisis." },
+  { id:"raza", stage:"Conexión", type:"breed", title:"¿De qué raza es {nombre}?", hint:"Cada raza tiene sensibilidades distintas." },
+  { id:"edad", stage:"Conexión", title:"¿Cuántos años tiene {nombre}?", grid:true, opts:[
+      {ic:"🐶",t:"Menos de 1 año"},{ic:"🐕",t:"1 a 3 años"},{ic:"🦮",t:"4 a 7 años"},{ic:"🐾",t:"8 años o más"} ]},
+  { id:"comida", stage:"Conexión", title:"¿Qué come {nombre} la mayor parte del tiempo?", opts:[
+      {ic:"🥣",t:"Croquetas secas comerciales",w:1,food:"croquetas"},{ic:"🥫",t:"Comida húmeda (lata o sobre)",w:1,food:"comida húmeda procesada"},
+      {ic:"🥩",t:"Comida casera, pero sin una guía",w:1,food:"comida casera sin guía"},{ic:"🔀",t:"Una mezcla de todo",w:1,food:"una mezcla sin plan"} ]},
+  { id:"picor", stage:"Síntomas", title:"¿{nombre} se rasca o se lame la piel con frecuencia?", opts:[
+      {ic:"✅",t:"Nunca",w:0},{ic:"🤏",t:"A veces",w:1,sig:"Se rasca o se lame de vez en cuando"},
+      {ic:"🔁",t:"Casi todos los días",w:2,sig:"Picor casi diario"},{ic:"🩹",t:"Tiene zonas sin pelo o heridas",w:3,sig:"Zonas sin pelo o heridas en la piel",flag:"heridas en la piel"} ]},
+  { id:"reacc", stage:"Síntomas", multi:true, title:"¿Has notado en {nombre} alguna de estas señales?", hint:"Puedes marcar varias.", opts:[
+      {ic:"👂",t:"Piel u orejas enrojecidas",w:1,sig:"Enrojecimiento en piel u orejas"},{ic:"👁️",t:"Ojos llorosos o legañas constantes",w:1,sig:"Ojos llorosos o legañas"},
+      {ic:"🐾",t:"Se lame o muerde las patas",w:1,sig:"Se lame o muerde las patas"},{ic:"🚫",t:"Ninguna",w:0,none:true} ]},
+  { id:"energia", stage:"Síntomas", title:"¿Cómo está la energía de {nombre} últimamente?", opts:[
+      {ic:"⚡",t:"Muy activo, juega todo el día",w:0},{ic:"🙂",t:"Normal",w:0},
+      {ic:"😮‍💨",t:"Se cansa más que antes",w:2,sig:"Se cansa más que antes"},{ic:"😴",t:"Duerme casi todo el día y no quiere jugar",w:3,sig:"Decaimiento: duerme casi todo el día",flag:"decaimiento marcado"} ]},
+  { id:"heces", stage:"Alerta", title:"¿Cómo están las heces de {nombre}?", opts:[
+      {ic:"✅",t:"Firmes y normales",w:0},{ic:"💨",t:"Blandas o con olor muy fuerte",w:1,sig:"Heces blandas o con olor fuerte"},
+      {ic:"💧",t:"Diarrea frecuente",w:2,sig:"Diarrea frecuente"},{ic:"🩸",t:"Con sangre o mucosidad",w:3,sig:"Sangre o mucosidad en las heces",flag:"sangre en las heces"} ]},
+  { id:"aliento", stage:"Alerta", title:"¿Cómo está el aliento de {nombre}?", opts:[
+      {ic:"✅",t:"Normal",w:0},{ic:"😬",t:"Mal aliento leve",w:1,sig:"Mal aliento"},
+      {ic:"🤢",t:"Mal aliento fuerte",w:2,sig:"Mal aliento fuerte"},{ic:"🩸",t:"Le sangran las encías",w:3,sig:"Sangrado en las encías",flag:"sangrado de encías"} ]},
+  { id:"vomito", stage:"Alerta", title:"¿{nombre} vomita o tiene náuseas después de comer?", opts:[
+      {ic:"✅",t:"Nunca",w:0},{ic:"🙂",t:"Rara vez",w:0},
+      {ic:"📅",t:"Más o menos 1 vez por semana",w:2,sig:"Vómitos semanales"},{ic:"⚠️",t:"Varios días por semana",w:3,sig:"Vómitos varias veces por semana",flag:"vómitos frecuentes"} ]}
+];
+
+let qi = 0;
+const qbox = document.getElementById('qbox');
+
+function renderQ(){
+  const q = Q[qi];
+  document.getElementById('qbar').style.width = (qi / Q.length * 100) + '%';
+  document.getElementById('qcount').textContent = (qi + 1) + '/' + Q.length;
+  document.getElementById('qback').style.visibility = qi ? 'visible' : 'hidden';
+  let h = `<div class="qstage">${q.stage}</div><h2 class="qtitle">${fill(q.title)}</h2>${q.hint ? `<p class="qhint">${fill(q.hint)}</p>` : '<div style="height:12px"></div>'}`;
+
+  if (q.type === "text") {
+    h += `<input class="input" id="inName" maxlength="20" placeholder="Ej.: Max, Luna, Toby…" autocomplete="off" value="${esc(S.nombre)}">
+          <button class="btn btn-green mt" id="nextName">CONTINUAR →</button>`;
+    qbox.innerHTML = h;
+    const inp = document.getElementById('inName');
+    const go = () => { const v = inp.value.trim(); if (!v) { inp.focus(); inp.style.borderColor = 'var(--red)'; return; }
+      S.nombre = cap(v); renderTpl(); next(); };
+    document.getElementById('nextName').onclick = go;
+    inp.onkeydown = e => { if (e.key === 'Enter') go(); };
+    setTimeout(() => inp.focus(), 50);
+    return;
+  }
+
+  if (q.type === "breed") {
+    h += `<input class="input search" id="bSearch" placeholder="🔍 Buscar raza…" autocomplete="off"><div class="opts breeds" id="bList"></div>`;
+    qbox.innerHTML = h;
+    const list = document.getElementById('bList');
+    const draw = f => {
+      const items = BREEDS.filter(b => b.toLowerCase().includes(f.toLowerCase()));
+      list.innerHTML = items.map(b => `<button class="opt" data-b="${esc(b)}"><span class="ic">🐕</span>${esc(b)}</button>`).join('')
+        + `<button class="opt" data-b=""><span class="ic">❓</span>Otra raza / no lo sé</button>`;
+      list.querySelectorAll('.opt').forEach(o => o.onclick = () => { o.classList.add('sel');
+        S.raza = o.dataset.b || "perro"; renderTpl(); setTimeout(next, 220); });
+    };
+    draw(""); document.getElementById('bSearch').oninput = e => draw(e.target.value);
+    return;
+  }
+
+  const sel = S.answers[q.id] || (q.multi ? [] : null);
+  h += `<div class="opts ${q.grid ? 'grid2' : ''}">` + q.opts.map((o, i) => {
+    const on = q.multi ? sel.includes(i) : sel === i;
+    return `<button class="opt ${on ? 'sel' : ''}" data-i="${i}"><span class="ic">${o.ic}</span><span>${o.t}</span>${q.multi ? '<span class="chk"></span>' : ''}</button>`;
+  }).join('') + `</div>`;
+  if (q.multi) h += `<button class="btn btn-green mt" id="nextMulti">CONTINUAR →</button>`;
+  qbox.innerHTML = h;
+
+  qbox.querySelectorAll('.opt').forEach(b => b.onclick = () => {
+    const i = +b.dataset.i;
+    if (!q.multi) {
+      S.answers[q.id] = i;
+      qbox.querySelectorAll('.opt').forEach(x => x.classList.remove('sel')); b.classList.add('sel');
+      setTimeout(next, 220); return;
+    }
+    let arr = S.answers[q.id] || [];
+    if (q.opts[i].none) arr = arr.includes(i) ? [] : [i];
+    else { arr = arr.filter(x => !q.opts[x].none); arr = arr.includes(i) ? arr.filter(x => x !== i) : [...arr, i]; }
+    S.answers[q.id] = arr;
+    qbox.querySelectorAll('.opt').forEach(x => x.classList.toggle('sel', arr.includes(+x.dataset.i)));
+  });
+  const nm = document.getElementById('nextMulti');
+  if (nm) nm.onclick = () => { if (!(S.answers[q.id] || []).length) return; next(); };
+}
+
+function next(){ qi++; if (qi < Q.length) renderQ(); else runProcessing(); }
+document.getElementById('qback').onclick = () => { if (qi > 0) { qi--; renderQ(); } };
+document.getElementById('start').onclick = () => { show('s-quiz'); renderQ(); track('ViewContent', {content_name:'quiz_start'}); };
+
+/* ================== PROCESAMIENTO ================== */
+function runProcessing(){
+  show('s-proc');
+  const lis = [...document.querySelectorAll('#psteps li')], bar = document.getElementById('pbar');
+  let p = 0, step = -1;
+  const t = setInterval(() => {
+    p += 1.4; bar.style.width = Math.min(p, 100) + '%';
+    const s = Math.min(Math.floor(p / 25), lis.length - 1);
+    if (s !== step) { if (step >= 0) lis[step].classList.add('done'); step = s; lis[s].classList.add('on'); }
+    if (p >= 100) { clearInterval(t); lis[step].classList.add('done'); setTimeout(showResult, 450); }
+  }, 70);
+}
+
+/* ================== RESULTADO ================== */
+function computeResult(){
+  let score = 0; const sigs = [], flags = [];
+  Q.forEach(q => {
+    if (!q.opts) return;
+    const a = S.answers[q.id]; if (a == null) return;
+    (Array.isArray(a) ? a : [a]).forEach(i => {
+      const o = q.opts[i]; if (q.id === 'comida' || q.id === 'edad') return;
+      score += o.w || 0; if (o.sig) sigs.push(o.sig); if (o.flag) flags.push(o.flag);
+    });
+  });
+  const level = score >= 7 ? 'alto' : score >= 3 ? 'mod' : 'bajo';
+  return { score, sigs, flags, level };
+}
+
+function showResult(){
+  const r = computeResult(), n = esc(S.nombre);
+  const food = (Q[3].opts[S.answers.comida] || {}).food;
+  const foodLine = food ? ` Y hoy come <b>${food}</b> casi todos los días.` : '';
+  const T = {
+    alto:{t:`${n} muestra varias señales que no deberías ignorar.`, lv:'Nivel de atención: ALTO', c:'lv-alto', pos:88,
+          b:`Picor, digestión irregular, cansancio y mal aliento suelen pasar como “cosas de perro”. Muchas veces no lo son. La alimentación es uno de los primeros factores a revisar — y es el único que tú controlas cada día.${foodLine}`},
+    mod:{t:`${n} ya muestra algunas señales de alerta.`, lv:'Nivel de atención: MODERADO', c:'lv-mod', pos:52,
+          b:`Son señales que la mayoría de los dueños ignora hasta que empeoran. Es el mejor momento para actuar: antes de que se vuelvan rutina.${foodLine}`},
+    bajo:{t:`${n} parece estar bien hoy. Mantenerlo así depende de su plato.`, lv:'Nivel de atención: BAJO', c:'lv-bajo', pos:14,
+          b:`Lo que come cada día influye en cómo llegará a los 8, 10 o 12 años. Prevenir es mucho más fácil que corregir.${foodLine}`}
+  }[r.level];
+
+  document.getElementById('rTitle').innerHTML = T.t;
+  document.getElementById('rBody').innerHTML = T.b;
+  const lv = document.getElementById('rLevel'); lv.textContent = T.lv; lv.className = 'level ' + T.c;
+  document.getElementById('rSignals').innerHTML = r.sigs.length
+    ? r.sigs.map(s => `<li><span>⚠️</span>${s}</li>`).join('')
+    : `<li><span>✅</span>No marcaste señales visibles. Aun así, lo que no se ve también cuenta.</li>`;
+  const vet = document.getElementById('rVet');
+  if (r.flags.length) { vet.hidden = false; document.getElementById('rVetList').textContent = 'Marcaste: ' + r.flags.join(', ') + '.'; }
+
+  show('s-result');
+  setTimeout(() => document.getElementById('gdot').style.left = T.pos + '%', 300);
+  track('QuizComplete', { nivel: r.level, raza: S.raza }, true);
+  track('ViewContent', { content_name: 'sales_page' });
+  startAnim();
+}
+
+/* ================== ANIMACIÓN ================== */
+function startAnim(){
+  const box = document.getElementById('anim'), scenes = [...box.querySelectorAll('.scene')], dots = [...box.querySelectorAll('.adots i')];
+  const meals = [360, 1460, 4000, 6000][S.answers.edad ?? 1];
+  let i = -1, started = false;
+  const go = () => {
+    i = (i + 1) % scenes.length;
+    scenes.forEach((s, k) => s.classList.toggle('on', k === i)); dots.forEach((d, k) => d.classList.toggle('on', k === i));
+    if (i === 2) countUp(document.getElementById('meals'), meals);
+  };
+  const io = new IntersectionObserver(es => { if (es[0].isIntersecting && !started) { started = true; go(); setInterval(go, 4200); } }, {threshold:.5});
+  io.observe(box);
+}
+function countUp(el, to){
+  const t0 = performance.now(), d = 1600;
+  const f = now => { const p = Math.min((now - t0) / d, 1); el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'); if (p < 1) requestAnimationFrame(f); };
+  requestAnimationFrame(f);
+}
+
+/* ================== CHECKOUT ================== */
+document.getElementById('gdays').textContent = CONFIG.garantiaDias;
+document.querySelectorAll('.buy').forEach(b => b.onclick = e => {
+  e.preventDefault();
+  const plan = b.dataset.plan, url = new URL(CONFIG.checkout[plan]);
+  new URLSearchParams(location.search).forEach((v, k) => url.searchParams.set(k, v)); // repassa UTMs
+  track('InitiateCheckout', { value: CONFIG.precio[plan], currency: CONFIG.precio.moneda, content_name: plan });
+  location.href = url.toString();
+});
+
+/* Botón fijo: aparece tras el lead, se oculta sobre las ofertas */
+const sticky = document.getElementById('sticky'), ofertas = document.getElementById('ofertas'), leadEl = document.querySelector('.lead');
+addEventListener('scroll', () => {
+  if (!document.getElementById('s-result').classList.contains('on')) return;
+  const past = leadEl.getBoundingClientRect().top < 0;
+  const o = ofertas.getBoundingClientRect(), near = o.top < innerHeight && o.top > -1400;
+  sticky.classList.toggle('on', past && !near);
+}, { passive: true });
+</script>
+</body>
+</html>

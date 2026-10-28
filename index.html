@@ -294,45 +294,8 @@
       <span class="kicker" data-t>Plan recomendado para {nombre}</span>
       <h1 data-t>{nombre} come lo que tú le sirves. <em>Todos los días, durante años.</em></h1>
       <p class="sub" data-t>Con el Protocolo Plato Vital dejas de adivinar: 50 recetas de comida natural y un plan de transición paso a paso para tu {raza}.</p>
-      <a href="#ofertas" class="btn btn-main" data-t>VER EL PLAN DE {NOMBRE} ↓</a>
-
-      <div class="lead">
-        <h2 data-t>Mira a {nombre} a los ojos.</h2>
-        <p data-t>No puede decirte que algo le cae mal. Que la piel le pica. Que se cansa antes que hace un año. Solo puede mostrártelo — rascándose, durmiendo más, dejando la comida a medias. Y la mayoría de los dueños lo atribuye a la edad, al clima o a “cosas de perro”.</p>
-        <p>Tú compras una marca cara y crees que haces lo correcto. Pero la bolsa dice “100% nutrición” y la lista de ingredientes dice otra cosa.</p>
-        <p class="pull">La industria vende comodidad: un producto que dura meses en el estante y que el perro come sin protestar. Eso no es lo mismo que comida de verdad.</p>
-        <p data-t>La buena noticia: el plato de {nombre} es la única parte de su salud que tú controlas cada día. Y cambiarlo es más fácil de lo que crees.</p>
-      </div>
-
-      <h2>El Método Plato Vital en 3 pasos</h2>
-      <div class="method">
-        <div class="mstep"><span class="n">1</span><div><b>TRANSICIÓN</b><p data-t>Cambias la dieta de {nombre} en 7 a 10 días, de forma gradual, para evitar malestar digestivo.</p></div></div>
-        <div class="mstep"><span class="n">2</span><div><b>NUTRICIÓN</b><p>50 recetas con ingredientes reales y porciones según el peso de tu perro. Nada de adivinar.</p></div></div>
-        <div class="mstep"><span class="n">3</span><div><b>CONTINUIDAD</b><p>Rotación de recetas para que nunca se aburra y siempre coma variado.</p></div></div>
-      </div>
-
-      <h2>Lo que vas a recibir</h2>
-      <ul class="inside">
-        <li>50 recetas de alimentación natural, explicadas paso a paso</li>
-        <li>Tabla de porciones según el peso de tu perro</li>
-        <li>Lista de compras para la semana</li>
-        <li>Acceso inmediato desde el celular — empieza hoy</li>
-      </ul>
-
       <h2 id="ofertas" data-t>Elige el plan de {nombre}</h2>
 
-      <table class="cmp" aria-label="Comparación de planes">
-        <thead><tr><th></th><th>Bronce</th><th class="g">Oro ★</th></tr></thead>
-        <tbody>
-          <tr><td>50 recetas naturales</td><td class="y">✔</td><td class="g y">✔</td></tr>
-          <tr><td>Guía de alimentos prohibidos</td><td class="y">✔</td><td class="g y">✔</td></tr>
-          <tr><td>Checklist de transición</td><td class="y">✔</td><td class="g y">✔</td></tr>
-          <tr><td>Guía de suplementos naturales</td><td class="x">—</td><td class="g y">✔</td></tr>
-          <tr><td>Plan de reinicio de 7 días</td><td class="x">—</td><td class="g y">✔</td></tr>
-          <tr><td>Guía de premios caseros</td><td class="x">—</td><td class="g y">✔</td></tr>
-          <tr><td><b>Precio</b></td><td>US$ 9,90</td><td class="g">US$ 14,90</td></tr>
-        </tbody>
-      </table>
 
       <div class="offers">
         <div class="offer">
@@ -371,10 +334,8 @@
       <div class="guar"><span class="s">🛡️</span><div><b>Garantía de <span id="gdays">7</span> días.</b><br><span style="font-size:15px;color:var(--muted)">Si no te gusta, pides el reembolso y recibes el 100% de tu dinero. Sin preguntas.</span></div></div>
 
       <h2>Preguntas frecuentes</h2>
-      <details><summary data-t>¿Sirve para un {raza}?</summary><p>Sí. Las recetas se ajustan por peso, así que funcionan para perros pequeños, medianos y grandes.</p></details>
       <details><summary>¿Y si mi perro tiene alguna enfermedad?</summary><p>Si tu perro está en tratamiento o tiene una condición diagnosticada (renal, hepática, pancreatitis, alergias), consulta a tu veterinario antes de cambiar su dieta y muéstrale las recetas.</p></details>
       <details><summary>¿Cómo recibo el material?</summary><p>Apenas se confirma el pago, recibes el acceso por email. Puedes verlo en el celular, la tablet o imprimirlo.</p></details>
-      <details><summary>¿Es caro cocinar para mi perro?</summary><p>Las recetas usan ingredientes de supermercado y vienen con lista de compras semanal para que no gastes de más.</p></details>
     </div>
 
     <footer>
@@ -382,7 +343,6 @@
       Los resultados pueden variar según cada perro.
     </footer>
   </div>
-  <div class="sticky" id="sticky"><a href="#ofertas" class="btn btn-gold" data-t>QUIERO EL PLAN DE {NOMBRE}</a></div>
 </section>
 
 <script>
@@ -612,14 +572,6 @@ document.querySelectorAll('.buy').forEach(b => b.onclick = e => {
   location.href = url.toString();
 });
 
-/* Botón fijo: aparece tras el lead, se oculta sobre las ofertas */
-const sticky = document.getElementById('sticky'), ofertas = document.getElementById('ofertas'), leadEl = document.querySelector('.lead');
-addEventListener('scroll', () => {
-  if (!document.getElementById('s-result').classList.contains('on')) return;
-  const past = leadEl.getBoundingClientRect().top < 0;
-  const o = ofertas.getBoundingClientRect(), near = o.top < innerHeight && o.top > -1400;
-  sticky.classList.toggle('on', past && !near);
-}, { passive: true });
 </script>
 </body>
 </html>
